@@ -47,6 +47,8 @@ INTERSECT
 SELECT id_caserne, capa_pompiers
 FROM caserne;
 
+/* 6bis */
+
 SELECT caserne.id_caserne, caserne.capa_pompiers, COUNT(pompier.id_pompier) AS count_pompiers
 FROM pompier
 INNER JOIN caserne
