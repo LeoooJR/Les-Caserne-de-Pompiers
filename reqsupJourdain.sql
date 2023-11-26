@@ -1,4 +1,4 @@
-/* 1. */
+/* 1.Query */
 /* Quelles caserne protège le plus de ville ? */
 
 SELECT id_caserne, COUNT(nom_ville) AS nbre_ville_protege
@@ -6,8 +6,25 @@ FROM protege
 GROUP BY 1
 ORDER BY 2 DESC;
 
-/* 2. */
-/* Le fabricant Peugeot équipe t-il préférentiellement plus une caserne que d’autres (la plus proche caserne ?) */
+/* 1.Result */
+/*
+id_caserne | nbre_ville_protege 
+------------+--------------------
+         10 |                  3
+          5 |                  3
+          3 |                  2
+          9 |                  2
+          7 |                  1
+          1 |                  1
+          8 |                  1
+          4 |                  1
+          6 |                  1
+          2 |                  1
+(10 rows)
+*/
+
+/* 2.Query */
+/* Le fabricant Peugeot équipe t-il préférentiellement plus une caserne que d’autres (la plus proche caserne sera indiquée par le signe *) */
 
 SELECT modele.nom_fabricant, camion.id_caserne AS caserne, COUNT(camion.id_camion) AS nbre_camion,
 CASE
@@ -26,8 +43,17 @@ WHERE modele.nom_fabricant = 'Mercedes_benz'
 GROUP BY 1, 2
 ORDER BY 3 DESC;
 
+/* 2.Result */
+/*
+nom_fabricant | caserne | nbre_camion | caserne_proche 
+---------------+---------+-------------+----------------
+ Mercedes_benz |       5 |           2 | *
+ Mercedes_benz |       2 |           1 | 
+ Mercedes_benz |      10 |           1 | 
+(3 rows)
+*/
 
-/* 3. */
+/* 3.Query */
 /* Quelle est le modèle de camion le plus répandu de manière général au sein des casernes ? */
 
 SELECT modele, COUNT(modele) as nbre_camion
@@ -36,7 +62,15 @@ GROUP BY 1
 ORDER BY 2 DESC
 LIMIT 1;
 
-/* 4. */
+/* 3.Result */
+/*
+  modele   | nbre_camion 
+-----------+-------------
+ Curiosity |           3
+(1 row)
+*/
+
+/* 4.Query */
 /* Combien de camions ont été fournis par le fabricant avec le plus haut délai de livraison moyen ? */
 
 SELECT COUNT(id_camion) as nbre_camion
@@ -52,12 +86,20 @@ SELECT COUNT(id_camion) as nbre_camion
 FROM camion
 INNER JOIN modele
 ON camion.modele = modele.nom_modele
-WHERE modele.nom_fabricant = (SELECT nom_fabricant
+WHERE modele.nom_fabricant IN (SELECT nom_fabricant
                                 FROM fabricant
                                 WHERE delai = (SELECT MAX(delai)
                                                 FROM fabricant));
 
-/* 5. */
+/* 4.Result */
+/*
+ nbre_camion 
+-------------
+           2
+(1 row)
+*/
+
+/* 5.Query */
 /* Quelle caserne manque de conducteur de camion ? (Un camion = un conducteur, on considère que tous les camions de la flotte doivent présenter un conducteur) */
 
 WITH
@@ -72,3 +114,13 @@ FROM vehicule
 FULL OUTER JOIN conducteur
 ON vehicule.id_caserne = conducteur.id_caserne
 WHERE (vehicule.nbre_camion > conducteur.nbre_pompier) AND vehicule.nbre_camion IS NOT NULL;
+
+/* 5.Result */
+/*
+ id_caserne | nbre_camion | nbre_pompier 
+------------+-------------+--------------
+          5 |           3 |            1
+          2 |           2 |            1
+          1 |           2 |            1
+(3 rows)
+*/

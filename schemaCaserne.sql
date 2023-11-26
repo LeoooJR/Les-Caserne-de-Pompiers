@@ -1,5 +1,7 @@
 --Creation des tables
+CREATE SCHEMA bibs;
 
+SET SCHEMA 'bibs';
 
 CREATE TABLE Caserne(
 Id_caserne 			INTEGER		,
