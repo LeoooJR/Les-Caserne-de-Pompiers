@@ -1,38 +1,43 @@
 --Creation des tables
 
 
-CREATE TABLE Caserne(
-Id_caserne 			INTEGER		,
-Capa_camions 		INTEGER		,
-Capa_pompiers		INTEGER		,
-Num_rue 			INTEGER		,
-Nom_rue 			VARCHAR(20)	,
-CP 					INTEGER		,
-Nom_ville 			VARCHAR(20)	,
-
-PRIMARY KEY(Id_caserne));
-
-
-CREATE TABLE Ville(
-Nom_ville 			VARCHAR(20)	,
-Nb_hab 				INTEGER		,
-CP 					INTEGER		,
-
-PRIMARY KEY(Nom_ville,CP));
+CREATE TABLE Caserne
+(
+    Id_caserne INTEGER,
+    Capa_camions INTEGER		,
+    Capa_pompiers INTEGER		,
+    Num_rue INTEGER		,
+    Nom_rue VARCHAR(20)	,
+    CP INTEGER		,
+    Nom_ville VARCHAR(20)	,
+    PRIMARY KEY(Id_caserne)
+);
 
 
-CREATE TABLE Adresse(
-Num_rue 			INTEGER		,
-Nom_rue 			VARCHAR(20)	,
-CP 					INTEGER		,
-Nom_ville 			VARCHAR(20)	,
-Type_habitation		VARCHAR(20)	,
-Proche_caserne		INTEGER		,
-Km					INTEGER		,
+CREATE TABLE Ville
+(
+    Nom_ville VARCHAR(20)	,
+    Nb_hab INTEGER		,
+    CP INTEGER		,
 
-PRIMARY KEY(Nom_rue,Num_rue,Nom_ville,CP),
-FOREIGN KEY(Nom_ville,CP) REFERENCES Ville(Nom_ville,CP),
-FOREIGN KEY(Proche_caserne) REFERENCES Caserne(Id_caserne));
+    PRIMARY KEY(Nom_ville,CP)
+);
+
+
+CREATE TABLE Adresse
+(
+    Num_rue INTEGER		,
+    Nom_rue VARCHAR(20)	,
+    CP INTEGER		,
+    Nom_ville VARCHAR(20)	,
+    Type_habitation VARCHAR(20)	,
+    Proche_caserne INTEGER		,
+    Km INTEGER		,
+
+    PRIMARY KEY(Nom_rue,Num_rue,Nom_ville,CP),
+    FOREIGN KEY(Nom_ville,CP) REFERENCES Ville(Nom_ville,CP),
+    FOREIGN KEY(Proche_caserne) REFERENCES Caserne(Id_caserne)
+);
 
 
 --ajouter la cle etrangere dans la caserne (reference circulaire)
@@ -40,67 +45,79 @@ ALTER TABLE Caserne
 ADD FOREIGN KEY(Nom_rue,Num_rue,Nom_ville,CP) REFERENCES Adresse(Nom_rue,Num_rue,Nom_ville,CP);
 
 
-CREATE TABLE Protege(
-Id_caserne			INTEGER		,
-Nom_ville			VARCHAR(20)	,
-CP					INTEGER		,
+CREATE TABLE Protege
+(
+    Id_caserne INTEGER		,
+    Nom_ville VARCHAR(20)	,
+    CP INTEGER		,
 
-PRIMARY KEY(Id_caserne,Nom_ville,CP),
-FOREIGN KEY(Nom_ville,CP) REFERENCES Ville(Nom_ville,CP),
-FOREIGN KEY(Id_caserne) REFERENCES Caserne(Id_caserne));
- 
-CREATE TABLE Fabricant(
-Nom_fabricant		VARCHAR(20)	,
-Delai				INTEGER		,
-Num_rue				INTEGER		,
-Nom_rue				VARCHAR(20)	,
-CP					INTEGER		,
-Nom_ville			VARCHAR(20)	,
+    PRIMARY KEY(Id_caserne,Nom_ville,CP),
+    FOREIGN KEY(Nom_ville,CP) REFERENCES Ville(Nom_ville,CP),
+    FOREIGN KEY(Id_caserne) REFERENCES Caserne(Id_caserne)
+);
 
-PRIMARY KEY(Nom_fabricant),
-FOREIGN KEY(Num_rue,Nom_rue,Nom_ville,CP) REFERENCES Adresse(Num_rue,Nom_rue,Nom_ville,CP));
+CREATE TABLE Fabricant
+(
+    Nom_fabricant VARCHAR(20)	,
+    Delai INTEGER		,
+    Num_rue INTEGER		,
+    Nom_rue VARCHAR(20)	,
+    CP INTEGER		,
+    Nom_ville VARCHAR(20)	,
 
-
-CREATE TABLE Modele(
-Nom_modele			VARCHAR(20)	,         
-Type_modele			VARCHAR(20)	,
-Motorisation		VARCHAR(20)	,
-Nom_fabricant		VARCHAR(20)	,
-
-PRIMARY KEY(Nom_modele),
-FOREIGN KEY(Nom_fabricant) REFERENCES Fabricant(Nom_fabricant));
+    PRIMARY KEY(Nom_fabricant),
+    FOREIGN KEY(Num_rue,Nom_rue,Nom_ville,CP) REFERENCES Adresse(Num_rue,Nom_rue,Nom_ville,CP)
+);
 
 
-CREATE TABLE Pompier(
-Id_caserne		INTEGER		,
-Id_pompier		INTEGER		,
-Nom				VARCHAR(20)	,
-Prenom			VARCHAR(20)	,
-Nom_rue			VARCHAR(20)	,
-Num_rue			INTEGER		,
-Nom_ville		VARCHAR(20)	,
-CP				INTEGER		,
+CREATE TABLE Modele
+(
+    Nom_modele VARCHAR(20)	,
+    Type_modele VARCHAR(20)	,
+    Motorisation VARCHAR(20)	,
+    Nom_fabricant VARCHAR(20)	,
 
-PRIMARY KEY(Id_caserne,Id_pompier),
-FOREIGN KEY(Id_caserne) REFERENCES Caserne(Id_caserne),
-FOREIGN KEY(Nom_rue,Num_rue,NOM_ville,CP) REFERENCES Adresse(Nom_rue,Num_rue,Nom_ville,CP));
+    PRIMARY KEY(Nom_modele),
+    FOREIGN KEY(Nom_fabricant) REFERENCES Fabricant(Nom_fabricant)
+);
 
 
-CREATE TABLE Camion(
-Id_caserne		INTEGER		,
-Id_camion		INTEGER		,
-Nb_places		INTEGER		,
-Modele			VARCHAR(20)	,
+CREATE TABLE Pompier
+(
+    Id_caserne INTEGER		,
+    Id_pompier INTEGER		,
+    Nom VARCHAR(20)	,
+    Prenom VARCHAR(20)	,
+    Nom_rue VARCHAR(20)	,
+    Num_rue INTEGER		,
+    Nom_ville VARCHAR(20)	,
+    CP INTEGER		,
 
-PRIMARY KEY(Id_caserne,Id_camion),
-FOREIGN KEY(Id_caserne) REFERENCES Caserne(Id_caserne),
-FOREIGN KEY(Modele) REFERENCES Modele(Nom_modele));
+    PRIMARY KEY(Id_caserne,Id_pompier),
+    FOREIGN KEY(Id_caserne) REFERENCES Caserne(Id_caserne),
+    FOREIGN KEY(Nom_rue,Num_rue,NOM_ville,CP) REFERENCES Adresse(Nom_rue,Num_rue,Nom_ville,CP)
+);
 
 
-CREATE TABLE Citerne(
-Id_caserne		INTEGER		,
-Id_camion		INTEGER		,
-Contenance		INTEGER		,
+CREATE TABLE Camion
+(
+    Id_caserne INTEGER		,
+    Id_camion INTEGER		,
+    Nb_places INTEGER		,
+    Modele VARCHAR(20)	,
 
-PRIMARY KEY(Id_caserne,Id_camion),
-FOREIGN KEY(Id_caserne,Id_camion) REFERENCES Camion(Id_caserne,Id_camion));
+    PRIMARY KEY(Id_caserne,Id_camion),
+    FOREIGN KEY(Id_caserne) REFERENCES Caserne(Id_caserne),
+    FOREIGN KEY(Modele) REFERENCES Modele(Nom_modele)
+);
+
+
+CREATE TABLE Citerne
+(
+    Id_caserne INTEGER		,
+    Id_camion INTEGER		,
+    Contenance INTEGER		,
+
+    PRIMARY KEY(Id_caserne,Id_camion),
+    FOREIGN KEY(Id_caserne,Id_camion) REFERENCES Camion(Id_caserne,Id_camion)
+);
