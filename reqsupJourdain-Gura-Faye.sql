@@ -24,34 +24,18 @@ id_caserne | nbre_ville_protege
 */
 
 /* 2.Query */
-/* Le fabricant Peugeot équipe t-il préférentiellement plus une caserne que d’autres (la plus proche caserne sera indiquée par le signe *) */
 
-SELECT modele.nom_fabricant, camion.id_caserne AS caserne, COUNT(camion.id_camion) AS nbre_camion,
-CASE
-WHEN camion.id_caserne = (SELECT proche_caserne
-                          FROM adresse, fabricant
-                          WHERE adresse.nom_ville = fabricant.nom_ville
-                          AND adresse.nom_rue = fabricant.nom_rue
-                          AND adresse.cp = fabricant.cp
-                          AND adresse.num_rue = fabricant.num_rue
-                          AND nom_fabricant = 'Mercedes_benz') THEN '*'
-ELSE NULL END AS caserne_proche
-FROM modele
-INNER JOIN camion
-ON modele.nom_modele = camion.modele
-WHERE modele.nom_fabricant = 'Mercedes_benz'
-GROUP BY 1, 2
-ORDER BY 3 DESC;
+-- Select the nom and prenom of the pompiers who have vowels as both their first and last character
 
-/* 2.Result */
-/*
-nom_fabricant | caserne | nbre_camion | caserne_proche 
----------------+---------+-------------+----------------
- Mercedes_benz |       5 |           2 | *
- Mercedes_benz |       2 |           1 | 
- Mercedes_benz |      10 |           1 | 
-(3 rows)
-*/
+SELECT DISTINCT prenom,nom 
+FROM pompier 
+WHERE prenom SIMILAR TO '(A|E|I|O|U)%(a|e|i|o|u)';
+
+--  prenom |   nom    
+-- --------+----------
+--  Annie  | Gaie
+--  Emma   | Augustin
+-- (2 rows)
 
 /* 3.Query */
 /* Quelle est le modèle de camion le plus répandu de manière général au sein des casernes ? */

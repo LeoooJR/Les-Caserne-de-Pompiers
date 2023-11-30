@@ -57,8 +57,7 @@ INTERSECT
 SELECT p.id_pompier, p.nom, p.prenom
 FROM pompier as p
     INNER JOIN adresse USING(nom_ville,  num_rue, nom_rue, cp)
-WHERE km > 5
-AND p.id_caserne = 3;
+WHERE km > 5 AND p.id_caserne = 3;
 
 -- 4.Result
 --  id_pompier |   nom   | prenom 
