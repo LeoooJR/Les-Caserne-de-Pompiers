@@ -6,7 +6,7 @@ BEGIN TRANSACTION;
 -- table Caserne
 -- Impossible de donner des informations sur l'adresse des casernes puisque toute adresse a besoin d'avoir
 -- des informations sur la caserne la plus proche (reference circulaire).
--- On remplit donc les casernes de facon incomplete puis on complete les casernes une fois les adresses insérées.
+-- On remplit donc les casernes de facon incomplete puis on complete les casernes une fois les adresses insï¿½rï¿½es.
  
 INSERT INTO Caserne(Id_caserne,Capa_camions,Capa_pompiers,Num_rue,Nom_rue,Nom_ville,CP)
 VALUES(1,8,45,NULL,NULL,NULL,NULL);
@@ -93,7 +93,7 @@ INSERT INTO Protege(Id_caserne,Nom_ville,CP) VALUES(3,'Draguignan',83240);
 INSERT INTO Protege(Id_caserne,Nom_ville,CP) VALUES(4,'Brignoles',83620);
 INSERT INTO Protege(Id_caserne,Nom_ville,CP) VALUES(4,'Draguignan',83240);
 
-COMMIT; -- on insère ces données
+COMMIT; -- on insï¿½re ces donnï¿½es
 END TRANSACTION; --fin de transaction
 
 --transaction pour remplir les tables Fabricant, Modele, Pompier, Camion et Citerne
@@ -175,5 +175,5 @@ VALUES(2,4,450);
 INSERT INTO Citerne(Id_caserne,Id_camion,Contenance)
 VALUES(3,1,1200);
 
-COMMIT; -- on insère ces données
+COMMIT; -- on insï¿½re ces donnï¿½es
 END TRANSACTION; --fin de transaction
