@@ -1,3 +1,4 @@
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14.9-blue)
 # Les Casernes de Pompiers - Projet M1 BIBS 2023-2024
 
 ## Context and Description
