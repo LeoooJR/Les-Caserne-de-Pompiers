@@ -1,10 +1,10 @@
 
 --1) quels est le nombre de casernes?
 
-  select COUNT (Id_caserne) as "le nombre de casernes" 
-  from caserne;
+select COUNT (Id_caserne) as "le nombre de casernes"
+from caserne;
 
-  /* résulat
+/* résulat
     le nombre de casernes 
 -----------------------
                      4
@@ -13,10 +13,10 @@
  */
 --2) quels sont les pompiers des casernes situés à Graguiguan?
 
-  select Id_pompier, Nom, Prenom
-  from Pompier, caserne
-  where caserne.Id_caserne = Pompier.Id_caserne
-    and caserne.Nom_ville = 'Draguignan';
+select Id_pompier, Nom, Prenom
+from Pompier, caserne
+where caserne.Id_caserne = Pompier.Id_caserne
+  and caserne.Nom_ville = 'Draguignan';
 
 /* 
     id_pompier |   nom   | prenom  
@@ -27,18 +27,18 @@
 
 */
 
-  --3) Quelles les casernes protégeant à la fois Brignoles et Le Luc?
+--3) Quelles les casernes protégeant à la fois Brignoles et Le Luc?
   select caserne.Id_caserne as "les casernes protégeant à la fois Brignoles et Le Luc"
   from caserne, Protege
   where caserne.Id_caserne = Protege.Id_caserne
     and Protege.Nom_ville = 'Brignoles'
-  intersect 
+intersect
   select caserne.Id_caserne as "les casernes protégeant à la fois Brignoles et Le Luc"
   from caserne, Protege
   where caserne.Id_caserne = Protege.Id_caserne
     and Protege.Nom_ville = 'Le Luc';
 
-  /* 
+/* 
   les casernes protégeant à la fois Brignoles et Le Luc 
 -------------------------------------------------------
                                                      1
@@ -46,17 +46,17 @@
 (2 lignes)
 */
 
-  --4) quels sont les pompiers de la caserne 3 habitant à plus de 5 kms de la caserne "la plus proche" pour leur adresse
-  select Id_pompier, Nom, Prenom
-  from Pompier, Adresse
-  where pompier.nom_rue = Adresse.nom_rue
-    and pompier.Num_rue = Adresse.Num_rue
-    and pompier.Nom_ville = Adresse.NOM_ville
-    and pompier.cp = Adresse.cp
-    and pompier.Id_caserne = 3
-    and Adresse.Km > 5;
+--4) quels sont les pompiers de la caserne 3 habitant à plus de 5 kms de la caserne "la plus proche" pour leur adresse
+select Id_pompier, Nom, Prenom
+from Pompier, Adresse
+where pompier.nom_rue = Adresse.nom_rue
+  and pompier.Num_rue = Adresse.Num_rue
+  and pompier.Nom_ville = Adresse.NOM_ville
+  and pompier.cp = Adresse.cp
+  and pompier.Id_caserne = 3
+  and Adresse.Km > 5;
 
-    /*
+/*
     id_pompier |   nom   | prenom 
 ------------+---------+--------
           1 | Montant | Yves
@@ -65,14 +65,14 @@
 */
 
 
-  --5) quel est le nombre de pompiers par caserne?
+--5) quel est le nombre de pompiers par caserne?
 
-  select caserne.Id_caserne, COUNT(Pompier.Id_pompier) as "nbre de pompier"
-  from Pompier , caserne 
-  where Pompier.Id_caserne = caserne.Id_caserne
-  group by caserne.Id_caserne;
+select caserne.Id_caserne, COUNT(Pompier.Id_pompier) as "nbre de pompier"
+from Pompier , caserne
+where Pompier.Id_caserne = caserne.Id_caserne
+group by caserne.Id_caserne;
 
-  /*
+/*
   id_caserne | nbre de pompier 
 ------------+-----------------
           4 |               1
@@ -83,21 +83,21 @@
 */
 
 
-  --6) quelles sont les casernes ayant atteint leur capacité maximale humaine?
+--6) quelles sont les casernes ayant atteint leur capacité maximale humaine?
 
-  --select   pompier.Id_caserne, COUNT(Id_pompier)
-  --from pompier, caserne
-  --where caserne.Id_caserne = pompier.Id_caserne
-  --group by pompier.Id_caserne;
-  
-  -- 7) quelles sont les pompier qui ne travail dans la ville où ils habitent ?
+--select   pompier.Id_caserne, COUNT(Id_pompier)
+--from pompier, caserne
+--where caserne.Id_caserne = pompier.Id_caserne
+--group by pompier.Id_caserne;
 
-  select Id_pompier, Nom, Prenom
-  from pompier, caserne
-  where pompier.Id_caserne = caserne.Id_caserne
-    and pompier.Nom_ville != caserne.Nom_ville;
+-- 7) quelles sont les pompier qui ne travail dans la ville où ils habitent ?
 
-    /* 
+select Id_pompier, Nom, Prenom
+from pompier, caserne
+where pompier.Id_caserne = caserne.Id_caserne
+  and pompier.Nom_ville != caserne.Nom_ville;
+
+/* 
     id_pompier |    nom     | prenom  
 ------------+------------+---------
           1 | Marchand   | Louis
@@ -111,15 +111,15 @@
 */
 
 
-  -- 8) lister par ordre décroissant les casernes en fonction du nombre de pompiers qui y travaillent?
-  
-  select caserne.Id_caserne, COUNT(pompier.Id_pompier)
-  from pompier, caserne
-  where pompier.Id_caserne = caserne.Id_caserne
-  group by caserne.Id_caserne
-  order by (COUNT(pompier.Id_pompier)) DESC;
+-- 8) lister par ordre décroissant les casernes en fonction du nombre de pompiers qui y travaillent?
 
-  /*
+select caserne.Id_caserne, COUNT(pompier.Id_pompier)
+from pompier, caserne
+where pompier.Id_caserne = caserne.Id_caserne
+group by caserne.Id_caserne
+order by (COUNT(pompier.Id_pompier)) DESC;
+
+/*
   id_caserne | count 
 ------------+-------
           3 |     4
@@ -134,7 +134,7 @@
 select caserne.Id_caserne, SUM(Contenance) as "le volume total"
 from caserne, Citerne
 where caserne.Id_caserne = Citerne.Id_caserne
-group by caserne.Id_caserne; 
+group by caserne.Id_caserne;
 
 /*
 id_caserne | le volume total 
